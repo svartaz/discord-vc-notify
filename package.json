@@ -1,0 +1,24 @@
+{
+  "name": "discord-vc-notify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "discord.js": "^12.2.0"
+  },
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sumimq/discord-vc-notify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sumimq/discord-vc-notify/issues"
+  },
+  "homepage": "https://github.com/sumimq/discord-vc-notify#readme"
+}
