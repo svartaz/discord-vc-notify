@@ -3,22 +3,24 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
-  "dependencies": {},
-  "devDependencies": {
-    "discord.js": "^12.2.0"
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "ts-node": "^10.7.0"
   },
   "scripts": {
-    "start": "node main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx ts-node main.ts",
+    "back-start": "nohup npx ts-node main.ts &",
+    "back-stop": "nohup npx ts-node main.ts"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sumimq/discord-vc-notify.git"
+    "url": "git+https://github.com/xekri/discord-vc-notify.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sumimq/discord-vc-notify/issues"
+    "url": "https://github.com/xekri/discord-vc-notify/issues"
   },
-  "homepage": "https://github.com/sumimq/discord-vc-notify#readme"
+  "homepage": "https://github.com/xekri/discord-vc-notify#readme"
 }
