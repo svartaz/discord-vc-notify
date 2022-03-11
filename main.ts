@@ -1,6 +1,6 @@
 'use strict';
 
-import { VoiceState, Client, Intents, TextChannel, MessageEmbedOptions } from 'discord.js';
+import { VoiceState, Client, Intents, TextChannel, MessageEmbedOptions, VoiceBasedChannel } from 'discord.js';
 require('dotenv').config()
 
 const client = new Client({
@@ -20,7 +20,7 @@ client.on('voiceStateUpdate', async (stateOld: VoiceState, stateNew: VoiceState)
   const vcIdOld = stateOld.channelId;
   const guild = stateOld.guild;
 
-  if (vcIdOld || vcIdNew)
+  if (!vcIdOld && vcIdNew || vcIdOld && !vcIdNew)
     guild.channels.cache
       .filter(channel => channel.isText())
       .forEach(channel => {
@@ -34,8 +34,8 @@ client.on('voiceStateUpdate', async (stateOld: VoiceState, stateNew: VoiceState)
         for (const i of [0, 1]) {
           const vcId = [vcIdOld, vcIdNew][i];
           if (vcId && vcIds.includes(vcId)) {
-            const userId = [stateOld, stateNew][i].id;
-            const userIds = guild.voiceStates.cache.map((_, userId) => userId).filter(x => [x != userId, true][i]);
+            const vc = <VoiceBasedChannel>guild.channels.cache.get(vcId);
+            const userIds = vc.members.map((_, userId) => userId)
 
             embeds.push({
               color: [0xFF0000, 0x00FF00][i],
