@@ -1,0 +1,7 @@
+{
+  "target": "ES2015",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "strictNullChecks": true
+  }
+}
