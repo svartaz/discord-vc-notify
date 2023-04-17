@@ -1,7 +1,6 @@
 'use strict';
 
 import { Client, VoiceChannel, GatewayIntentBits } from 'discord.js';
-require('dotenv').config()
 
 const client = new Client({
   intents: [
@@ -58,5 +57,8 @@ client.on('voiceStateUpdate', async (stateOld, stateNew) => {
 
   voiceChannel.send({ embeds: [embed] }).catch(console.error)
 });
+
+if (!process.env.DISCORD_TOKEN)
+  throw 'set DISCORD_TOKEN';
 
 client.login(process.env.DISCORD_TOKEN);
