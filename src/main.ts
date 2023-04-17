@@ -1,6 +1,7 @@
 'use strict';
 
-import { Client, VoiceChannel, GatewayIntentBits } from 'discord.js';
+import { Client, VoiceChannel, GatewayIntentBits, VoiceState } from 'discord.js';
+require('dotenv').config();
 
 const client = new Client({
   intents: [
@@ -16,26 +17,17 @@ client.on('ready', () => {
   console.log(`${client.user?.tag} logged in`);
 });
 
-client.on('voiceStateUpdate', async (stateOld, stateNew) => {
-  const voiceChannelIdOld = stateOld.channelId;
-  const voiceChannelIdNew = stateNew.channelId;
-  const guild = stateOld.guild;
-
-  const i =
-    voiceChannelIdOld && !voiceChannelIdNew ? 0 :
-      !voiceChannelIdOld && voiceChannelIdNew ? 1 :
-        null
-
-  if (i == null) return
-
-  const voiceChannelId = [voiceChannelIdOld, voiceChannelIdNew][i];
+const sendStateChange = (state: VoiceState, leaves: boolean) => {
+  const guild = state.guild;
+  const voiceChannelId = state.channelId;
   const voiceChannel = <VoiceChannel>guild.channels.cache.get(<string>voiceChannelId);
   const userIds = voiceChannel.members.map((_, userId) => userId)
 
-  console.log(voiceChannel.name, userIds)
+  const user = guild.members.cache.get(state.id)
+  console.log(`${user?.displayName} (${user?.id}) ${leaves ? 'leaves' : 'enters'} ${voiceChannel.name} (${voiceChannel.name})`)
 
   const embed = {
-    color: [0xFF0000, 0x00FF00][i],
+    color: leaves ? 0xFF0000 : 0x00FF00,
     fields: [
       {
         name: 'channel',
@@ -44,7 +36,7 @@ client.on('voiceStateUpdate', async (stateOld, stateNew) => {
       },
       {
         name: 'event',
-        value: `<@${[stateOld, stateNew][i].id}> ${['out', 'in'][i]}`,
+        value: `<@${state.id}> ${leaves ? 'out' : 'in'}`,
         inline: true,
       },
       {
@@ -56,6 +48,25 @@ client.on('voiceStateUpdate', async (stateOld, stateNew) => {
   }
 
   voiceChannel.send({ embeds: [embed] }).catch(console.error)
+}
+
+client.on('voiceStateUpdate', async (stateOld, stateNew) => {
+  if (stateOld.channelId) {
+    if (stateNew.channelId) {
+      if (stateOld.channelId != stateNew.channelId) {
+        sendStateChange(stateOld, true);
+        sendStateChange(stateNew, false);
+      }
+    }
+    else
+      sendStateChange(stateOld, true);
+  }
+  else {
+    if (stateNew.channelId)
+      sendStateChange(stateNew, false);
+    else
+      return
+  }
 });
 
 if (!process.env.DISCORD_TOKEN)

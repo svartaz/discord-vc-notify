@@ -5,12 +5,12 @@
   "main": "main.js",
   "dependencies": {
     "discord.js": "14.6.0",
+    "dotenv": "^16.0.3",
     "typescript": "^4.6.2"
   },
   "scripts": {
     "test": "npx tsc --noEmit",
-    "postinstall": "tsc --build",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/main.js\"",
+    "build": "tsc --build",
     "start": "node dist/main.js"
   },
   "repository": {
@@ -22,9 +22,5 @@
   "bugs": {
     "url": "https://github.com/xekri/discord-vc-notify/issues"
   },
-  "homepage": "https://github.com/xekri/discord-vc-notify#readme",
-  "devDependencies": {
-    "concurrently": "^8.0.1",
-    "nodaemon": "^0.0.5"
-  }
+  "homepage": "https://github.com/xekri/discord-vc-notify#readme"
 }
