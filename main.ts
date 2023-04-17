@@ -1,6 +1,6 @@
 'use strict';
 
-import { Client, IntentsBitField, VoiceChannel, EmbedBuilder, GatewayIntentBits } from 'discord.js';
+import { Client, VoiceChannel, GatewayIntentBits } from 'discord.js';
 require('dotenv').config()
 
 const client = new Client({
@@ -18,27 +18,29 @@ client.on('ready', () => {
 });
 
 client.on('voiceStateUpdate', async (stateOld, stateNew) => {
-  const vcIdOld = stateOld.channelId;
-  const vcIdNew = stateNew.channelId;
+  const voiceChannelIdOld = stateOld.channelId;
+  const voiceChannelIdNew = stateNew.channelId;
   const guild = stateOld.guild;
 
-  const i = !vcIdOld && vcIdNew ? 1 :
-    vcIdOld && !vcIdNew ? 0 : 2
+  const i =
+    voiceChannelIdOld && !voiceChannelIdNew ? 0 :
+      !voiceChannelIdOld && voiceChannelIdNew ? 1 :
+        null
 
-  if (i == 2) return
+  if (i == null) return
 
-  const vcId = [vcIdOld, vcIdNew][i];
-  const vc = <VoiceChannel>guild.channels.cache.get(<string>vcId);
-  const userIds = vc.members.map((_, userId) => userId)
+  const voiceChannelId = [voiceChannelIdOld, voiceChannelIdNew][i];
+  const voiceChannel = <VoiceChannel>guild.channels.cache.get(<string>voiceChannelId);
+  const userIds = voiceChannel.members.map((_, userId) => userId)
 
-  console.log(vc.name, userIds)
+  console.log(voiceChannel.name, userIds)
 
   const embed = {
     color: [0xFF0000, 0x00FF00][i],
     fields: [
       {
         name: 'channel',
-        value: `<#${vcId}>`,
+        value: `<#${voiceChannelId}>`,
         inline: true,
       },
       {
@@ -54,7 +56,7 @@ client.on('voiceStateUpdate', async (stateOld, stateNew) => {
     ]
   }
 
-  vc.send({ embeds: [embed] }).catch(console.error)
+  voiceChannel.send({ embeds: [embed] }).catch(console.error)
 });
 
 client.login(process.env.DISCORD_TOKEN);
