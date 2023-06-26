@@ -24,7 +24,7 @@ const sendStateChange = (state: VoiceState, leaves: boolean) => {
   const userIds = voiceChannel.members.map((_, userId) => userId)
 
   const user = guild.members.cache.get(state.id)
-  console.log(`${user?.displayName} (${user?.id}) ${leaves ? 'leaves' : 'enters'} ${voiceChannel.name} (${voiceChannel.name})`)
+  console.log(`${user?.displayName} (${user?.id}) ${leaves ? 'leaves' : 'enters'} ${voiceChannel.name} (${voiceChannel.id})`)
 
   const embed = {
     color: leaves ? 0xFF0000 : 0x00FF00,
