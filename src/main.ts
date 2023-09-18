@@ -18,24 +18,24 @@ client.on('ready', () => {
 const sendStateChange = (state: VoiceState, leaves: boolean) => {
   try {
     const guild = state.guild;
+
     const voiceChannelId = state.channelId;
-    const voiceChannel = <VoiceChannel>guild.channels.cache.get(<string>voiceChannelId);
+    if (voiceChannelId === null)
+      throw 'channel id is null';
+
+    const voiceChannel = <VoiceChannel>guild.channels.cache.get(voiceChannelId);
     const userIds = voiceChannel.members.map((_, userId) => userId)
 
     const user = guild.members.cache.get(state.id)
-    console.log(`${user?.displayName} (${user?.id}) ${leaves ? 'leaves' : 'enters'} ${voiceChannel.name} (${voiceChannel.id})`)
+    const verb = leaves ? 'leaves' : 'joins';
+    console.log(`${user?.displayName} (${user?.id}) ${verb} ${voiceChannel.name} (${voiceChannel.id})`)
 
     const embed = {
       color: leaves ? 0xFF0000 : 0x00FF00,
       fields: [
         {
-          name: 'channel',
-          value: `<#${voiceChannelId}>`,
-          inline: true,
-        },
-        {
           name: 'event',
-          value: `<@${state.id}> ${leaves ? 'out' : 'in'}`,
+          value: `<@${state.id}> ${verb}`,
           inline: true,
         },
         {
