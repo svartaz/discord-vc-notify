@@ -1,5 +1,3 @@
-'use strict';
-
 import { Client, VoiceChannel, GatewayIntentBits, VoiceState } from 'discord.js';
 require('dotenv').config();
 
