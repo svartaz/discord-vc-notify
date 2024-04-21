@@ -17,18 +17,21 @@ client.on('ready', () => {
 
 const sendStateChange = (state: VoiceState, leaves: boolean) => {
   try {
-    const guild = state.guild;
+    const { guild } = state;
 
     const voiceChannelId = state.channelId;
     if (voiceChannelId === null)
       throw 'channel id is null';
 
     const voiceChannel = <VoiceChannel>guild.channels.cache.get(voiceChannelId);
-    const userIds = voiceChannel.members.map((_, userId) => userId)
+    const userIds = voiceChannel.members.map((_, userId) => userId);
 
-    const user = guild.members.cache.get(state.id)
+    const member = guild.members.cache.get(state.id);
+    if (!member || member.user.bot)
+      return;
+
     const verb = leaves ? 'leaves' : 'joins';
-    console.log(`${user?.displayName} (${user?.id}) ${verb} ${voiceChannel.name} (${voiceChannel.id})`)
+    console.log(`${member.displayName} (${member.id}) ${verb} ${voiceChannel.name} (${voiceChannel.id})`);
 
     const embed = {
       color: leaves ? 0xFF0000 : 0x00FF00,
@@ -40,7 +43,7 @@ const sendStateChange = (state: VoiceState, leaves: boolean) => {
         },
         {
           name: 'result',
-          value: userIds.map(x => `<@${x}>`).join(' ') || 'none',
+          value: userIds.map(it => `<@${it}>`).join(' ') || 'none',
           inline: true,
         },
       ]
@@ -67,7 +70,7 @@ client.on('voiceStateUpdate', async (stateOld, stateNew) => {
     if (stateNew.channelId)
       sendStateChange(stateNew, false);
     else
-      return
+      return;
   }
 });
 

@@ -4,9 +4,9 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "discord.js": "^14.13.0",
-    "dotenv": "^16.0.3",
-    "typescript": "^5.2.2"
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.4.2"
   },
   "scripts": {
     "test": "tsc --noEmit",
